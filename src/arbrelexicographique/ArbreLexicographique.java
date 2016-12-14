@@ -1,67 +1,70 @@
 package arbrelexicographique;
 
 public class ArbreLexicographique {
-	private NoeudAbstrait entree;
 
-	public ArbreLexicographique() {
-		entree = new NoeudVide();
-	}
+    private static final long serialVersionUID = 6023914574333353540L;
 
-	public String toString() {
-		return entree.toString("");
-	}
+    private NoeudAbstrait entree;
 
-	public boolean contient(String s) {
-		return entree.contient(s);
-	}
+    public ArbreLexicographique() {
+        entree = new NoeudVide();
+    }
 
-	public boolean prefixe(String s) {
-		return entree.prefixe(s);
-	}
+    public String toString() {
+        return entree.toString("");
+    }
 
-	public int nbMots() {
-		return entree.nbMots();
-	}
+    public boolean contient(String s) {
+        return entree.contient(s);
+    }
 
-	public boolean ajout(String s) {
-		try {
-			entree = entree.ajout(s);
-		} catch (ArbreLexicographiqueException ale) {
-			return false;
-		}
-		return true;
-	}
+    public boolean prefixe(String s) {
+        return entree.prefixe(s);
+    }
 
-	public boolean suppr(String s) {
-		try {
-			entree = entree.suppr(s);
-		} catch (ArbreLexicographiqueException ale) {
-			return false;
-		}
-		return true;
-	}
+    public int nbMots() {
+        return entree.nbMots();
+    }
 
-	public boolean estVide() {
-		return entree instanceof NoeudVide;
-	}
-	
-	public static void main(String[] args) {
-		ArbreLexicographique arbre = new ArbreLexicographique();
-		System.out.println(arbre.ajout("exemple"));
-		arbre.ajout("personne");
-		arbre.ajout("exo");
-		System.out.println(arbre.ajout("exemple"));
-		arbre.ajout("dernier");
-		System.out.println(arbre);
-		System.out.println(arbre.suppr("absent"));
-		System.out.println(arbre.suppr("personne"));
-		System.out.println(arbre.suppr("personne"));
-		System.out.println(arbre);
-		System.out.println(arbre.contient("mot"));
-		System.out.println(arbre.contient("dernier"));
-		System.out.println(arbre.prefixe("der"));
-		System.out.println(arbre.prefixe("exa"));
-		System.out.println(arbre.nbMots());
-	}
+    public boolean ajout(String s) {
+        try {
+            entree = entree.ajout(s);
+        } catch (ArbreLexicographiqueException ale) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean suppr(String s) {
+        try {
+            entree = entree.suppr(s);
+        } catch (ArbreLexicographiqueException ale) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean estVide() {
+        return entree instanceof NoeudVide;
+    }
+
+    public static void main(String[] args) {
+        ArbreLexicographique arbre = new ArbreLexicographique();
+        System.out.println(arbre.ajout("exemple"));
+        arbre.ajout("personne");
+        arbre.ajout("exo");
+        System.out.println(arbre.ajout("exemple"));
+        arbre.ajout("dernier");
+        // System.out.println(arbre);
+        // System.out.println(arbre.suppr("absent"));
+        // System.out.println(arbre.suppr("personne"));
+        // System.out.println(arbre.suppr("personne"));
+        // System.out.println(arbre);
+        // System.out.println(arbre.contient("mot"));
+        // System.out.println(arbre.contient("dernier"));
+        // System.out.println(arbre.prefixe("der"));
+        // System.out.println(arbre.prefixe("exa"));
+        // System.out.println(arbre.nbMots());
+    }
 
 }
