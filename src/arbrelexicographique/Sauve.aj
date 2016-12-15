@@ -15,8 +15,10 @@ public aspect Sauve {
     final static String homeDir = System.getProperty("user.home");
     final static Path directory = Paths.get(homeDir,"/workspace");
     final static Path file = Paths.get(directory.toString(), "/treeSauvTmp.txt");
+
     static {
 
+    	// TODO test it
         if (!Files.isDirectory(directory)) {
             throw new FileSystemNotFoundException(directory + "does not exist.");
         }
@@ -26,16 +28,13 @@ public aspect Sauve {
                 Files.delete(file);
             }
             else if (Files.exists(file)) {
-                throw new RuntimeException(file + "exist but isn't a regular file (it could be for example an directory).");
+                throw new RuntimeException("'" + file + "' exist but isn't a regular file (it could be for example an directory).");
             }
+            Files.createFile(file);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
 
-        try (BufferedWriter writer = Files.newBufferedWriter(file, Charset.defaultCharset())) {
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
-        }
 
     }
 
