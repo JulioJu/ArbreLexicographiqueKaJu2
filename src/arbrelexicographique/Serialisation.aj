@@ -2,40 +2,70 @@ package arbrelexicographique;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public aspect Serialisation {
-	
-	declare parents : arbrelexicographique.ArbreLexicographique implements Serializable;
 
-public void ArbreLexicographique.sauve(String nomFichier) {
-	try {
-		FileWriter f =  new FileWriter(nomFichier);
-		BufferedWriter bf = new BufferedWriter(f);
-		bf.write(this.toString());
-		bf.close();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-}	
+	// TODO delete it !!!!!
+    final static String homeDir = System.getProperty("user.home");
+    final static Path directory = Paths.get(homeDir,"/workspace");
+    final static Path file = Paths.get(directory.toString(), "/treeSauvTmp.txt");
 
-public void ArbreLexicographique.charge(String nomFichier) {
-	try {
-		FileReader f =  new FileReader(nomFichier);
-		BufferedReader bf = new BufferedReader(f);	
-		String line = bf.readLine();
-		while (line != null) { // while loop begins here
-			this.ajout(line);
-		}
-		
-		bf.close();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+
+    declare parents : arbrelexicographique.ArbreLexicographique implements Serializable;
+
+    public void ArbreLexicographique.save(String fileName) {
+
+        // TODO Make rather an alert Windows
+        // Test if parent directory exist
+        if (!Files.isDirectory(directory)) {
+            throw new FileSystemNotFoundException(directory + "does not exist.");
+        }
+
+        // TODO Make rather an alert Windows
+        // Test if file exit
+        try {
+            if (Files.isRegularFile(file)) {
+                System.out.println("Warning : file exist !");
+            }
+            else if (Files.exists(file)) {
+                throw new RuntimeException("'" + file + "' exist but isn't a regular file (it could be for example an directory).");
+            }
+            Files.createFile(file);
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+        // Create and write file
+        try (BufferedWriter writer = Files.newBufferedWriter(file, Charset.defaultCharset())) {
+            System.out.println("Pending save file…");
+            writer.write(this.toString());
+            System.out.println("Save performed");
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+    }
+
+    public void ArbreLexicographique.load(String fileName) {
+
+        try (BufferedReader reader = Files.newBufferedReader(file, Charset.defaultCharset())) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                this.ajout(line);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+    }
 }
-}
+
+// vim:ft=java

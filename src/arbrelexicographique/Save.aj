@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 // https://www.safaribooksonline.com/library/view/aspectj-cookbook/0596006543/ch04s03.html
-public aspect Sauve {
+public aspect Save {
 
     final static String homeDir = System.getProperty("user.home");
     final static Path directory = Paths.get(homeDir,"/workspace");
