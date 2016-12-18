@@ -65,6 +65,9 @@ public class ArbreLexicographique {
         // System.out.println(arbre.prefixe("der"));
         // System.out.println(arbre.prefixe("exa"));
         // System.out.println(arbre.nbMots());
+
+        ArbreLexicographique tree = new ArbreLexicographique();
+        System.out.println(tree.getPrivateVarDefineInAspect3());
     }
 
 }

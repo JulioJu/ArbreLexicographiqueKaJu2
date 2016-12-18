@@ -9,11 +9,10 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 public aspect Serialisation {
 
-	// TODO delete it !!!!!
+    // TODO delete it !!!!!
     final static String homeDir = System.getProperty("user.home");
     final static Path directory = Paths.get(homeDir,"/workspace");
     final static Path file = Paths.get(directory.toString(), "/treeSauvTmp.txt");
@@ -25,29 +24,31 @@ public aspect Serialisation {
 
         // TODO Make rather an alert Windows
         // Test if parent directory exist
+        System.out.println("essai");
         if (!Files.isDirectory(directory)) {
             throw new FileSystemNotFoundException(directory + "does not exist.");
         }
 
         // TODO Make rather an alert Windows
         // Test if file exit
-        try {
-            if (Files.isRegularFile(file)) {
-                System.out.println("Warning : file exist !");
-            }
-            else if (Files.exists(file)) {
-                throw new RuntimeException("'" + file + "' exist but isn't a regular file (it could be for example an directory).");
-            }
-            Files.createFile(file);
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
+        if (Files.isRegularFile(file)) {
+            System.out.println("Warning : file exist !");
+            try {
+				Files.delete(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        else if (Files.exists(file)) {
+            throw new RuntimeException("'" + file + "' exist but isn't a regular file (it could be for example a directory).");
         }
 
         // Create and write file
         try (BufferedWriter writer = Files.newBufferedWriter(file, Charset.defaultCharset())) {
-            System.out.println("Pending save file…");
+            System.out.println("Recording in progress…");
             writer.write(this.toString());
-            System.out.println("Save performed");
+            System.out.println("File recording performed");
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }

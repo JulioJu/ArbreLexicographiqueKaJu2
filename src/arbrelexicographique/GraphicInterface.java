@@ -1,4 +1,4 @@
-package arbrelexicographique.gui;
+package arbrelexicographique;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,30 +16,28 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
+import javax.swing.JTree;
 
 public class GraphicInterface {
 
     private JFrame frame;
     private static arbrelexicographique.ArbreLexicographique tree = new arbrelexicographique.ArbreLexicographique();
 
-    static protected void mntmSaveActionPerformed () {
-    }
-
     /**
      * Launch the application.
      */
     public static void main(String[] args) {
 
-        System.out.println(tree.ajout("exemple"));
-        tree.ajout("personne");
-        tree.ajout("exo");
-        System.out.println(tree.ajout("exemple"));
-        tree.ajout("dernier");
-        System.out.println(tree.ajout("exemple"));
-        tree.ajout("personne");
-        tree.ajout("exo");
-        System.out.println(tree.ajout("exemple"));
-        tree.ajout("dernier");
+        // System.out.println(tree.ajout("exemple"));
+        // tree.ajout("personne");
+        // tree.ajout("exo");
+        // System.out.println(tree.ajout("exemple"));
+        // tree.ajout("dernier");
+        // System.out.println(tree.ajout("exemple"));
+        // tree.ajout("personne");
+        // tree.ajout("exo");
+        // System.out.println(tree.ajout("exemple"));
+        // tree.ajout("dernier");
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -78,7 +76,9 @@ public class GraphicInterface {
         mnNewMenu.add(mntmLoad);
         mntmLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("essai");
+                tree.load("blop");
+                System.out.println(tree.toString());
+
             }
         });
 
@@ -86,9 +86,7 @@ public class GraphicInterface {
         mnNewMenu.add(mntmSave);
         mntmSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // arbre.save();
-            	System.out.println("Save performed");
-            	mntmSaveActionPerformed();
+                tree.save("blop");
             }
         });
 
@@ -115,8 +113,8 @@ public class GraphicInterface {
         JButton button_3 = new JButton("Prefix");
         panel.add(button_3);
 
-        JLabel label = new JLabel("What?");
-        panel.add(label);
+        JLabel lblwhat = new JLabel("  What?  ");
+        panel.add(lblwhat);
 
         JTextPane textPane = new JTextPane();
         panel.add(textPane);
@@ -130,6 +128,10 @@ public class GraphicInterface {
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(Color.WHITE);
         tabbedPane.addTab("Tree", null, panel_2, null);
+        panel_2.setLayout(new BorderLayout(0, 0));
+        
+        JTree tree_1 = new JTree();
+        panel_2.add(tree_1, BorderLayout.WEST);
 
         JPanel panel_3 = new JPanel();
         panel_3.setBackground(Color.WHITE);
