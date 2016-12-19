@@ -14,24 +14,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
-import javax.swing.UIManager;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 public class GraphicInterface extends JPanel {
 
     private static final long serialVersionUID = 5323033065904404945L;
 
-    // //Optionally play with line styles.  Possible values are
-    // //"Angled" (the default), "Horizontal", and "None".
-    // private static boolean playWithLineStyle = false;
-    // private static String lineStyle = "Horizontal";
+    private JTree jtree;
 
-    //Optionally set the look and feel.
-    private static boolean useSystemLookAndFeel = false;
-
-    private ArbreLexicographique tree = new ArbreLexicographique();
+    private ArbreLexicographique treeLexico = new ArbreLexicographique();
 
     public GraphicInterface () {
 
@@ -74,8 +70,8 @@ public class GraphicInterface extends JPanel {
         mnNewMenu.add(mntmLoad);
         mntmLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tree.load("blop");
-                System.out.println(tree.toString());
+                treeLexico.load("blop");
+                System.out.println(treeLexico.toString());
 
             }
         });
@@ -84,7 +80,7 @@ public class GraphicInterface extends JPanel {
         mnNewMenu.add(mntmSave);
         mntmSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tree.save("blop");
+                treeLexico.save("blop");
             }
         });
 
@@ -96,10 +92,47 @@ public class GraphicInterface extends JPanel {
 
     }
 
+    private void createNodes(DefaultMutableTreeNode root) {
+        DefaultMutableTreeNode level_1 = null;
+        DefaultMutableTreeNode level_2 = null;
+
+        level_1 = new DefaultMutableTreeNode("child");
+        root.add(level_1);
+
+        level_2 = new DefaultMutableTreeNode("A");
+        level_1.add(level_2);
+        level_2 = new DefaultMutableTreeNode("B");
+        level_1.add(level_2);
+        level_2 = new DefaultMutableTreeNode("C");
+        level_1.add(level_2);
+        level_2 = new DefaultMutableTreeNode("D");
+        level_1.add(level_2);
+        level_2 = new DefaultMutableTreeNode("E");
+        level_1.add(level_2);
+        level_2 = new DefaultMutableTreeNode("F");
+        level_1.add(level_2);
+
+        level_2.add(new DefaultMutableTreeNode("i"));
+
+    }
+
     private void buildJTree(JPanel panel_2) {
 
-        JTree jtree = new JTree();
-        panel_2.add(jtree, BorderLayout.WEST);
+        //Create the nodes.
+        DefaultMutableTreeNode root =
+            new DefaultMutableTreeNode("root");
+        createNodes(root);
+
+        //Create a tree that allows one selection at a time.
+        jtree = new JTree(root);
+        jtree.getSelectionModel().setSelectionMode
+                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+        //Create the scroll pane and add the tree to it.
+        JScrollPane treeView = new JScrollPane(jtree);
+
+        //Add the split pane to this panel.
+        panel_2.add(treeView);
 
     }
 
@@ -114,7 +147,7 @@ public class GraphicInterface extends JPanel {
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(Color.WHITE);
         tabbedPane.addTab("Tree", null, panel_2, null);
-        panel_2.setLayout(new BorderLayout(0, 0));
+        panel_2.setLayout(new GridLayout(1, 0));
 
         buildJTree(panel_2);
 
@@ -131,15 +164,6 @@ public class GraphicInterface extends JPanel {
      * event dispatch thread.
      */
     private static void createAndShowGUI() {
-
-        if (useSystemLookAndFeel) {
-            try {
-                UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                System.err.println("Couldn't use system look and feel.");
-            }
-        }
 
         //Create and set up the window.
         JFrame frame = new JFrame("Lexicographic tree");
