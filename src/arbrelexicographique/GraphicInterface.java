@@ -1,12 +1,14 @@
 package arbrelexicographique;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,14 +18,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
-public class GraphicInterface extends JPanel {
-
-    private static final long serialVersionUID = 5323033065904404945L;
+public class GraphicInterface {
 
     private JTree jtree;
 
@@ -33,41 +38,18 @@ public class GraphicInterface extends JPanel {
 
     }
 
-    public void displayNorthButtons(JFrame frame) {
-
-        JPanel panel = new JPanel();
-        frame.getContentPane().add(panel, BorderLayout.NORTH);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-
-        JButton button = new JButton("Add");
-        panel.add(button);
-
-        JButton button_1 = new JButton("Delete");
-        panel.add(button_1);
-
-        JButton button_2 = new JButton("Choose");
-        panel.add(button_2);
-
-        JButton button_3 = new JButton("Prefix");
-        panel.add(button_3);
-
-        JLabel lblwhat = new JLabel("  What?  ");
-        panel.add(lblwhat);
-
-        JTextPane textPane = new JTextPane();
-        panel.add(textPane);
-    }
-
     public void displayMenu(JFrame frame) {
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
 
-        JMenu mnNewMenu = new JMenu("File");
-        menuBar.add(mnNewMenu);
+        JMenu menuFile = new JMenu("File");
+        menuFile.setMnemonic(KeyEvent.VK_F);
+        menuBar.add(menuFile);
+
 
         JMenuItem mntmLoad = new JMenuItem("Load");
-        mnNewMenu.add(mntmLoad);
+        menuFile.add(mntmLoad);
         mntmLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 treeLexico.load("blop");
@@ -76,21 +58,76 @@ public class GraphicInterface extends JPanel {
             }
         });
 
-        JMenuItem mntmSave = new JMenuItem("Save");
-        mnNewMenu.add(mntmSave);
+        JMenuItem mntmSave = new JMenuItem("Save", new ImageIcon("images/save.png"));
+        menuFile.add(mntmSave);
         mntmSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 treeLexico.save("blop");
             }
         });
 
-        JMenu mnNewMenu_1 = new JMenu("Help");
-        menuBar.add(mnNewMenu_1);
+        JMenuItem menuExit = new JMenuItem("Exit");
+        menuExit.setMnemonic(KeyEvent.VK_X);
+        menuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_MASK));
+        menuExit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+        menuFile.add(menuExit);
+
+        JMenu menuHelp = new JMenu("Help");
+        menuBar.add(menuHelp);
 
         JMenuItem mntmAbout = new JMenuItem("About");
-        mnNewMenu_1.add(mntmAbout);
+        menuHelp.add(mntmAbout);
 
     }
+
+
+    protected void addButtons(JToolBar toolBar) {
+        JButton button = null;
+        //separator
+        toolBar.addSeparator();
+
+        JPanel panel = new JPanel();
+        button = new JButton("Add");
+        panel.add(button);
+        button = new JButton("Delete");
+        panel.add(button);
+        button = new JButton("Choose");
+        panel.add(button);
+        button = new JButton("Prefix");
+        panel.add(button);
+        toolBar.add(panel);
+
+        toolBar.addSeparator();
+        JLabel lblwhat = new JLabel("What?");
+        toolBar.add(lblwhat);
+        toolBar.addSeparator();
+
+        //fifth component is NOT a button!
+        JTextField textField = new JTextField("A text field");
+        textField.setColumns(10);
+        // textField.addActionListener(this);
+        // textField.setActionCommand(TEXT_ENTERED);
+        toolBar.add(textField);
+
+    }
+
+
+    public void displayNorthButtons(JFrame frame) {
+
+
+        //Create the toolbar.
+        JToolBar toolBar = new JToolBar("ToolBox");
+        addButtons(toolBar);
+        toolBar.setFloatable(true);
+        toolBar.setRollover(true);
+        frame.add(toolBar, BorderLayout.PAGE_START);
+    }
+
+
 
     private void createNodes(DefaultMutableTreeNode root) {
         DefaultMutableTreeNode level_1 = null;
@@ -126,7 +163,16 @@ public class GraphicInterface extends JPanel {
         //Create a tree that allows one selection at a time.
         jtree = new JTree(root);
         jtree.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+            (TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+        // Icon JTree
+        // http://docs.oracle.com/javase/tutorial/uiswing/examples/components/GenealogyExampleProject/src/components/GenealogyTree.java
+        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+        Icon personIcon = null;
+        renderer.setLeafIcon(personIcon);
+        renderer.setClosedIcon(personIcon);
+        renderer.setOpenIcon(personIcon);
+        jtree.setCellRenderer(renderer);
 
         //Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(jtree);
@@ -145,14 +191,12 @@ public class GraphicInterface extends JPanel {
         frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JPanel panel_2 = new JPanel();
-        panel_2.setBackground(Color.WHITE);
         tabbedPane.addTab("Tree", null, panel_2, null);
         panel_2.setLayout(new GridLayout(1, 0));
 
         buildJTree(panel_2);
 
         JPanel panel_3 = new JPanel();
-        panel_3.setBackground(Color.WHITE);
         tabbedPane.addTab("List", null, panel_3, null);
 
     }
@@ -167,8 +211,15 @@ public class GraphicInterface extends JPanel {
 
         //Create and set up the window.
         JFrame frame = new JFrame("Lexicographic tree");
+        try {
+            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+            // Is your UI already created? So you will have to update the component-tree
+            // of your current frame (or actually all of them...)
+            SwingUtilities.updateComponentTreeUI(frame);
+        } catch(Exception e) { /* Most of the time you're just going to ignore it */ }
         frame.setBounds(100, 100, 450, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(400, 400));
 
         //Add content to the window.
         GraphicInterface graphicInterface = new GraphicInterface();
@@ -198,6 +249,18 @@ public class GraphicInterface extends JPanel {
         // tree.ajout("exo");
         // System.out.println(tree.ajout("exemple"));
         // tree.ajout("dernier");
+
+        // try {
+        //     for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        //         if ("Nimbus".equals(info.getName())) {
+        //             UIManager.setLookAndFeel(info.getClassName());
+        //             break;
+        //         }
+        //     }
+        // } catch (Exception e) {
+        //     // If Nimbus is not available, you can set the GUI to another look and feel.
+        // }
+
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
