@@ -5,7 +5,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-public aspect ArbreLexicographiqueAspect {
+public aspect ArbreLexicographiqueVisualisation {
 
     declare parents : ArbreLexicographique implements TreeModel ;
 

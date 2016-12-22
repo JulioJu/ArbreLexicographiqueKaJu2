@@ -26,15 +26,26 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class GraphicInterface {
+public class GraphicInterface extends JTree {
 
-    private JTree jtree;
+    private static final long serialVersionUID = -1455483992386678927L;
 
-    private ArbreLexicographique treeLexico = new ArbreLexicographique();
+    public JTree jtree;
+    public DefaultTreeModel treeModel;
+    public DefaultMutableTreeNode rootNode;
+
+    private ArbreLexicographique treeLexico;
+
 
     public GraphicInterface () {
+        rootNode = new DefaultMutableTreeNode("root node");
+        treeModel = new DefaultTreeModel(rootNode);
+        treeModel.addTreeModelListener(new MyTreeModelListener());
+        createNodes(rootNode);
 
     }
 
@@ -54,7 +65,6 @@ public class GraphicInterface {
             public void actionPerformed(ActionEvent e) {
                 treeLexico.load("blop");
                 System.out.println(treeLexico.toString());
-
             }
         });
 
@@ -84,24 +94,73 @@ public class GraphicInterface {
 
     }
 
+    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
+            Object child,
+            boolean shouldBeVisible) {
+        DefaultMutableTreeNode childNode =
+            new DefaultMutableTreeNode(child);
 
-    protected void addButtons(JToolBar toolBar) {
+        if (parent == null) {
+            parent = rootNode;
+        }
+
+        //It is key to invoke this on the TreeModel, and NOT DefaultMutableTreeNode
+        treeModel.insertNodeInto(childNode, parent,
+                parent.getChildCount());
+
+        //Make sure the user can see the lovely new node.
+        if (shouldBeVisible) {
+            jtree.scrollPathToVisible(new TreePath(childNode.getPath()));
+        }
+        return childNode;
+    }
+
+    public DefaultMutableTreeNode addObject(Object child) {
+        DefaultMutableTreeNode parentNode = null;
+        TreePath parentPath = this.jtree.getSelectionPath();
+
+        if (parentPath == null) {
+            parentNode = rootNode;
+        } else {
+            parentNode = (DefaultMutableTreeNode)
+                (parentPath.getLastPathComponent());
+        }
+
+        return addObject(parentNode, child, true);
+    }
+
+    private void addButtons (JPanel panel, GraphicInterface graphicInterface) {
         JButton button = null;
+
+        button = new JButton("Add");
+        panel.add(button);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                graphicInterface.addObject("New Node ");
+            }
+        });
+
+        button = new JButton("Delete");
+        panel.add(button);
+
+        button = new JButton("Choose");
+        panel.add(button);
+
+        button = new JButton("Prefix");
+        panel.add(button);
+
+    }
+
+    protected void defineToolBar(JToolBar toolBar, GraphicInterface graphicInterface) {
         //separator
         toolBar.addSeparator();
 
         JPanel panel = new JPanel();
-        button = new JButton("Add");
-        panel.add(button);
-        button = new JButton("Delete");
-        panel.add(button);
-        button = new JButton("Choose");
-        panel.add(button);
-        button = new JButton("Prefix");
-        panel.add(button);
+        addButtons(panel, graphicInterface);
         toolBar.add(panel);
 
         toolBar.addSeparator();
+
         JLabel lblwhat = new JLabel("What?");
         toolBar.add(lblwhat);
         toolBar.addSeparator();
@@ -116,12 +175,12 @@ public class GraphicInterface {
     }
 
 
-    public void displayNorthButtons(JFrame frame) {
+    public void displayNorthButtons(JFrame frame, GraphicInterface graphicInterface) {
 
 
         //Create the toolbar.
         JToolBar toolBar = new JToolBar("ToolBox");
-        addButtons(toolBar);
+        defineToolBar(toolBar, graphicInterface);
         toolBar.setFloatable(true);
         toolBar.setRollover(true);
         frame.add(toolBar, BorderLayout.PAGE_START);
@@ -156,12 +215,12 @@ public class GraphicInterface {
     private void buildJTree(JPanel panel_2) {
 
         //Create the nodes.
-        DefaultMutableTreeNode root =
-            new DefaultMutableTreeNode("root");
-        createNodes(root);
+        // See constructor
 
         //Create a tree that allows one selection at a time.
-        jtree = new JTree(root);
+
+        jtree = new JTree(treeModel);
+        jtree.setShowsRootHandles(true);
         jtree.getSelectionModel().setSelectionMode
             (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -225,7 +284,7 @@ public class GraphicInterface {
         GraphicInterface graphicInterface = new GraphicInterface();
         graphicInterface.displayMenu(frame);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
-        graphicInterface.displayNorthButtons(frame);
+        graphicInterface.displayNorthButtons(frame, graphicInterface);
         graphicInterface.displayTabbedPane(frame);
 
         //Display the window.

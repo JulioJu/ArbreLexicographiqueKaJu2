@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public aspect NoeudAbstraitAspect {
+public aspect NoeudAbstraitVisualisation {
 
     declare parents : NoeudAbstrait implements TreeNode;
 
