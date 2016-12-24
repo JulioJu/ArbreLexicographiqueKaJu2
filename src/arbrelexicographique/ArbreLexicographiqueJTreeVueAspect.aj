@@ -10,14 +10,15 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 // TODO Why import this ?
 
-public class GraphicInterfaceJTree extends JTree{
+aspect ArbreLexicographiqueJTreeVueAspect {
 
-    private static final long serialVersionUID = 1455483992386678927L;
+
+    declare parents : arbrelexicographique.ArbreLexicographique extends JTree;
 
 	//Create the nodes.
-    DefaultMutableTreeNode rootNode;
+    DefaultMutableTreeNode ArbreLexicographique.rootNode;
 
-    public GraphicInterfaceJTree (DefaultTreeModel treeModel, DefaultMutableTreeNode rootNode) {
+    public ArbreLexicographique.new(DefaultTreeModel treeModel, DefaultMutableTreeNode rootNode) {
 
         //Create the nodes.
         super(new DefaultTreeModel(rootNode));
@@ -43,7 +44,7 @@ public class GraphicInterfaceJTree extends JTree{
 
     }
 
-    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
+    public DefaultMutableTreeNode ArbreLexicographique.addObject(DefaultMutableTreeNode parent,
             Object child,
             boolean shouldBeVisible) {
         DefaultMutableTreeNode childNode =
@@ -55,7 +56,7 @@ public class GraphicInterfaceJTree extends JTree{
 
         //It is key to invoke this on the TreeModel, and NOT DefaultMutableTreeNode
         // TODO Why cast ???
-        ((DefaultTreeModel) treeModel).insertNodeInto(childNode, parent,
+        ((DefaultTreeModel) getModel()).insertNodeInto(childNode, parent,
                 parent.getChildCount());
 
         //Make sure the user can see the lovely new node.
@@ -65,7 +66,7 @@ public class GraphicInterfaceJTree extends JTree{
         return childNode;
     }
 
-    public DefaultMutableTreeNode addObject(Object child) {
+    public DefaultMutableTreeNode ArbreLexicographique.addObject(Object child) {
         DefaultMutableTreeNode parentNode = null;
         TreePath parentPath = this.getSelectionPath();
 
@@ -79,7 +80,7 @@ public class GraphicInterfaceJTree extends JTree{
         return addObject(parentNode, child, true);
     }
 
-    private void createNodes(DefaultMutableTreeNode root) {
+    private void ArbreLexicographique.createNodes(DefaultMutableTreeNode root) {
         DefaultMutableTreeNode level_1 = null;
         DefaultMutableTreeNode level_2 = null;
 
@@ -104,3 +105,5 @@ public class GraphicInterfaceJTree extends JTree{
     }
 
 }
+
+// vim: ft=java

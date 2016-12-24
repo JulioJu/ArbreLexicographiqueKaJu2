@@ -33,7 +33,7 @@ public class GraphicInterface extends JTree {
 
     private ArbreLexicographique treeLexico;
     private DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode();
-    private GraphicInterfaceJTree graphicInterfaceJTree = new GraphicInterfaceJTree(new DefaultTreeModel(defaultMutableTreeNode), defaultMutableTreeNode);
+    private ArbreLexicographique arbreLexicographiqueJTreeVueAspect = new ArbreLexicographique(new DefaultTreeModel(defaultMutableTreeNode), defaultMutableTreeNode);
     public GraphicInterface () {
     }
 
@@ -94,7 +94,7 @@ public class GraphicInterface extends JTree {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                graphicInterfaceJTree.addObject("New Node ");
+                arbreLexicographiqueJTreeVueAspect.addObject("New Node ");
             }
         });
 
@@ -153,7 +153,7 @@ public class GraphicInterface extends JTree {
         JPanel panel_jtree = new JPanel();
         tabbedPane.addTab("Tree", null, panel_jtree, null);
         panel_jtree.setLayout(new GridLayout(1, 0));
-        panel_jtree.add(graphicInterfaceJTree);
+        panel_jtree.add(arbreLexicographiqueJTreeVueAspect);
 
         JPanel panel_list = new JPanel();
         tabbedPane.addTab("List", null, panel_list, null);
