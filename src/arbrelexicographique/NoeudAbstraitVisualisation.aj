@@ -20,7 +20,22 @@ public aspect NoeudAbstraitVisualisation {
         = Collections.emptyEnumeration();
     // Todo in AspectJ please
     private NoeudAbstrait NoeudAbstrait.parent;
-    private Vector<NoeudAbstrait> NoeudAbstrait.children;
+
+    pointcut setParentAddNodeNoeudVide(NoeudVide noeudVide, String s) :
+        within(NoeudVide)
+        && call(public NoeudAbstrait ajout(String) throws ArbreLexicographiqueException )
+        && target(noeudVide)
+        && args(s)
+        ;
+    NoeudAbstrait around(NoeudVide noeudVide, String s) : setParentAddNodeNoeudVide(noeudVide, s) {
+        NoeudAbstrait n = new Marque(noeudVide);
+        for (int i = s.length() - 1; i >= 0; i--) {
+            NoeudAbstrait parent = new Noeud(new NoeudVide(), n, s.charAt(i));
+            n.setParent(parent);
+            n = parent;
+        }
+        return n;
+    }
 
     // @Override doesn't work in AspectJ
     public TreeNode NoeudAbstrait.getChildAt(int childIndex){
@@ -77,7 +92,7 @@ public aspect NoeudAbstraitVisualisation {
                     && filsCourant != node
                     ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
                 ) {
-                    count ++;
+                count ++;
                 }
             if (count == this.getChildCount())
                 return -1;
@@ -103,26 +118,36 @@ public aspect NoeudAbstraitVisualisation {
 
     // @Override
     public Enumeration NoeudAbstrait.children(){
-        if (children == null) {
+        if (!(this instanceof Marque || this instanceof NoeudVide))
             return EMPTY_ENUMERATION;
-        } else {
-            return children.elements();
+        else {
+            Vector<NoeudAbstrait> vector = new Vector<NoeudAbstrait>(3, 2);
+            for (NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils()
+                    ; !(filsCourant instanceof NoeudVide)
+                    ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
+                ) {
+                vector.addElement(filsCourant);
+                }
+            return vector.elements();
         }
     }
 
     // *************
 
-    // Getters et setters
+    // Getters and setters
 
-    // @Override
     public DefaultMutableTreeNode NoeudAbstrait.getDefaultMutableTreeNode () {
         return this.defaultMutableTreeNode;
     }
 
-    // @Override
     public void NoeudAbstrait.setDefaultMutableTreeNode (DefaultMutableTreeNode defaultMutableTreeNode) {
         this.defaultMutableTreeNode = defaultMutableTreeNode;
     }
+
+    public void NoeudAbstrait.setParent(NoeudAbstrait parent) {
+        this.parent = parent;
+    }
+
 
 }
 

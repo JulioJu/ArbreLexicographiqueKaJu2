@@ -75,12 +75,10 @@ public aspect ArbreLexicographiqueVisualisation {
     // Getters et setters
 
     // TODO WARNING uncomment
-    // // @Override
     // public DefaultTreeModel ArbreLexicographique.getDefaultTreeModel () {
     //     return this.defaultTreeModel;
     // }
 
-    // @Override
     public void ArbreLexicographique.setDefaultTreeModel (DefaultTreeModel defaultTreeModel) {
         this.defaultTreeModel = defaultTreeModel;
     }
