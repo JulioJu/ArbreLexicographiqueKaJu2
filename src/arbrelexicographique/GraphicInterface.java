@@ -27,9 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-public class GraphicInterface extends JTree {
-
-    private static final long serialVersionUID = -1455483992386678927L;
+public class GraphicInterface {
 
     private ArbreLexicographique treeLexico;
     private DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode();

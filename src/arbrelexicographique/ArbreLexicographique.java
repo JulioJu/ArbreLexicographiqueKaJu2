@@ -4,7 +4,10 @@ public class ArbreLexicographique {
 
     private static final long serialVersionUID = 6023914574333353540L;
 
-    private NoeudAbstrait entree;
+    // TODO for remove this error, I've changed modifier of field entree from private to public
+    // private NoeudAbstrait entree;
+	// See http://stackoverflow.com/questions/10721037/aspectj-access-private-fields
+    public NoeudAbstrait entree;
 
     public ArbreLexicographique() {
         entree = new NoeudVide();
@@ -55,16 +58,16 @@ public class ArbreLexicographique {
         arbre.ajout("exo");
         System.out.println(arbre.ajout("exemple"));
         arbre.ajout("dernier");
-        // System.out.println(arbre);
-        // System.out.println(arbre.suppr("absent"));
-        // System.out.println(arbre.suppr("personne"));
-        // System.out.println(arbre.suppr("personne"));
-        // System.out.println(arbre);
-        // System.out.println(arbre.contient("mot"));
-        // System.out.println(arbre.contient("dernier"));
-        // System.out.println(arbre.prefixe("der"));
-        // System.out.println(arbre.prefixe("exa"));
-        // System.out.println(arbre.nbMots());
+        System.out.println(arbre);
+        System.out.println(arbre.suppr("absent"));
+        System.out.println(arbre.suppr("personne"));
+        System.out.println(arbre.suppr("personne"));
+        System.out.println(arbre);
+        System.out.println(arbre.contient("mot"));
+        System.out.println(arbre.contient("dernier"));
+        System.out.println(arbre.prefixe("der"));
+        System.out.println(arbre.prefixe("exa"));
+        System.out.println(arbre.nbMots());
 
         ArbreLexicographique tree = new ArbreLexicographique();
         // System.out.println(tree.getPrivateVarDefineInAspect3());

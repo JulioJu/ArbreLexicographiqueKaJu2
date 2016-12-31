@@ -23,12 +23,9 @@ aspect ArbreLexicographiqueJTreeVueAspect {
         //Create the nodes.
         super(new DefaultTreeModel(rootNode));
         this.rootNode = rootNode;
-        treeModel.addTreeModelListener(new MyTreeModelListener());
         createNodes(rootNode);
 
         this.setShowsRootHandles(true);
-        this.getSelectionModel().setSelectionMode
-            (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         // Icon JTree
         // http://docs.oracle.com/javase/tutorial/uiswing/examples/components/GenealogyExampleProject/src/components/GenealogyTree.java
