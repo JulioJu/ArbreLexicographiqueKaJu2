@@ -30,7 +30,11 @@ public class GraphicInterface {
 
     public GraphicInterface () {
         treeLexico = new ArbreLexicographique();
-        treeLexico.ajout("blop");
+        treeLexico.ajout("lala");
+        treeLexico.ajout("lbla");
+        treeLexico.ajout("lcla");
+        treeLexico.ajout("lcla");
+        // treeLexico.ajout("blop");
         // System.out.println(treeLexico.toString());
         treeLexico.setVue();
     }

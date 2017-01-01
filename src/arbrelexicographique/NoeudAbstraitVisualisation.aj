@@ -13,7 +13,7 @@ public aspect NoeudAbstraitVisualisation {
 
     private DefaultMutableTreeNode NoeudAbstrait.defaultMutableTreeNode;
 
-    public int i = 1;
+    // public int i = 1;
 
     // Noeud.toString changed
     pointcut noeudToString(Noeud noeud, String s) : within (Noeud)
@@ -22,28 +22,18 @@ public aspect NoeudAbstraitVisualisation {
                                && args(s)
                                ;
     String around(Noeud noeud, String s) : noeudToString(noeud, s) {
-        System.out.println("***");
-        System.out.println(s);
-        System.out.println(noeud.getValeur());
-        System.out.println(i++);
-        System.out.println("***\n\n\n\n\n");
+        // System.out.println("***");
+        // System.out.println(s);
+        // System.out.println(noeud.getValeur());
+        // System.out.println(i++);
+        // System.out.println("***\n\n\n\n\n");
         // return Character.toString(noeud.getValeur());
         return s;
     }
     // Noeud.toString
-    // TODO Why doesn't it work ??
-    // public String Noeud.toString() {
-    //     return Character.toString(this.getValeur());
-    // }
-
-
-    // TreeNode Implementation
-    // ***********
-
-    static public final Enumeration<TreeNode> NoeudAbstrait.EMPTY_ENUMERATION
-        = Collections.emptyEnumeration();
-    // Todo in AspectJ please
-    private NoeudAbstrait NoeudAbstrait.parent;
+    public String Noeud.toString() {
+        return Character.toString(this.getValeur());
+    }
 
     pointcut setParentAddNodeNoeudVide(NoeudVide noeudVide, String s) :
         within(NoeudVide)
@@ -60,6 +50,15 @@ public aspect NoeudAbstraitVisualisation {
         }
         return n;
     }
+
+
+    // TreeNode Implementation
+    // ***********
+
+    static public final Enumeration<TreeNode> NoeudAbstrait.EMPTY_ENUMERATION
+        = Collections.emptyEnumeration();
+    // Todo in AspectJ please
+    private NoeudAbstrait NoeudAbstrait.parent;
 
     // @Override doesn't work in AspectJ
     public TreeNode NoeudAbstrait.getChildAt(int childIndex){
@@ -86,7 +85,7 @@ public aspect NoeudAbstraitVisualisation {
         }
         else {
             int count = 0;
-            for (NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils()
+            for (NoeudAbstrait filsCourant = (NoeudAbstrait) ((Noeud)this).getFils()
                     ; !(filsCourant instanceof NoeudVide)
                     ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
                 ) {
@@ -106,27 +105,34 @@ public aspect NoeudAbstraitVisualisation {
         if (node == null) {
             throw new IllegalArgumentException("Argument is null.");
         }
-        else if (!(this instanceof Marque || this instanceof NoeudVide))
+        else if (this instanceof Marque || this instanceof NoeudVide) {
+            System.out.println("échec 1");
             return -1;
+        }
         else {
             int count = 0;
-            for (NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils()
+            NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils();
+            if (node instanceof Marque && filsCourant instanceof Marque)
+                return 0;
+            for (
                     ; !(filsCourant instanceof NoeudVide)
                     // Not isEqual, because it's by reference not by value
-                    && filsCourant != node
+                    && ((Noeud)filsCourant).getValeur() != ((Noeud)node).getValeur()
                     ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
                 ) {
                 count ++;
                 }
-            if (count == this.getChildCount())
+            if (count == this.getChildCount()) {
+                System.out.println("échec 2");
                 return -1;
+            }
             return count;
         }
     }
 
     // @Override
     public boolean NoeudAbstrait.getAllowsChildren(){
-        if (!(this instanceof Marque || this instanceof NoeudVide))
+        if (this instanceof Marque || this instanceof NoeudVide)
             return false;
         else
             return true;
@@ -134,7 +140,7 @@ public aspect NoeudAbstraitVisualisation {
 
     // @Override
     public boolean NoeudAbstrait.isLeaf(){
-        if (!(this instanceof Marque || this instanceof NoeudVide))
+        if (this instanceof Marque || this instanceof NoeudVide)
             return true;
         else
             return false;
@@ -142,7 +148,7 @@ public aspect NoeudAbstraitVisualisation {
 
     // @Override
     public Enumeration NoeudAbstrait.children(){
-        if (!(this instanceof Marque || this instanceof NoeudVide))
+        if (this instanceof Marque || this instanceof NoeudVide)
             return EMPTY_ENUMERATION;
         else {
             Vector<NoeudAbstrait> vector = new Vector<NoeudAbstrait>(3, 2);

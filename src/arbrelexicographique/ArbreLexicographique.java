@@ -1,18 +1,12 @@
 package arbrelexicographique;
 
-import javax.swing.Icon;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeModel;
-
 public class ArbreLexicographique {
 
     private static final long serialVersionUID = 6023914574333353540L;
 
-    // TODO for remove this error, I've changed modifier of field entree from private to public
     // private NoeudAbstrait entree;
-	// See http://stackoverflow.com/questions/10721037/aspectj-access-private-fields
-    public NoeudAbstrait entree;
+    // See http://stackoverflow.com/questions/10721037/aspectj-access-private-fields
+    private NoeudAbstrait entree;
 
     public ArbreLexicographique() {
         entree = new NoeudVide();
@@ -76,6 +70,20 @@ public class ArbreLexicographique {
 
         // ArbreLexicographique tree = new ArbreLexicographique();
         // System.out.println(tree.getPrivateVarDefineInAspect3());
+    }
+
+    /**
+     * @return the entree
+     */
+    public NoeudAbstrait getEntree() {
+        return entree;
+    }
+
+    /**
+     * @param entree the entree to set
+     */
+    public void setEntree(NoeudAbstrait entree) {
+        this.entree = entree;
     }
 
 }
