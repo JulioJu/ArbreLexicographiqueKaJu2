@@ -1,9 +1,9 @@
 package arbrelexicographique;
 
+import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 public aspect ArbreLexicographiqueVisualisation {
@@ -11,13 +11,14 @@ public aspect ArbreLexicographiqueVisualisation {
     declare parents : ArbreLexicographique implements TreeModel ;
 
     private DefaultTreeModel ArbreLexicographique.defaultTreeModel;
+    EventListenerList ArbreLexicographique.listenerList = new EventListenerList();
 
     // ********* implements TreeModel
 
     public Object ArbreLexicographique.getRoot () {
         // TODO for remove this error, I've changed modifier of field 'entre' from private to public
         // See http://stackoverflow.com/questions/10721037/aspectj-access-private-fields
-        return this.entree;
+        return (TreeModel)this;
     }
 
     // @Override doesn't work in AspectJ
@@ -32,10 +33,7 @@ public aspect ArbreLexicographiqueVisualisation {
 
     // @Override
     public boolean ArbreLexicographique.isLeaf(Object node) {
-        // TODO I don't know if this « if » is necessary. If think no. If node isn't node, should return false and not an exception.
-        if (node instanceof NoeudAbstrait)
-            throw new IllegalArgumentException("This object isn't a node");
-        else if (!(node instanceof Marque || node instanceof NoeudVide))
+        if (!(node instanceof Marque || node instanceof NoeudVide))
             return true;
         else
             return false;
@@ -60,28 +58,16 @@ public aspect ArbreLexicographiqueVisualisation {
 
     // @Override
     public void ArbreLexicographique.addTreeModelListener(TreeModelListener l) {
-        // Not useful for ArbreLexicographique : do not change value of a node.
-        throw new UnsupportedOperationException();
+        listenerList.add(TreeModelListener.class, l);
     }
 
     // @Override
     public void ArbreLexicographique.removeTreeModelListener(TreeModelListener l) {
-        // Not useful for ArbreLexicographique : do not change value of a node.
-        throw new UnsupportedOperationException();
+        listenerList.remove(TreeModelListener.class, l);
     }
 
     // **********************
 
-    // Getters et setters
-
-    // TODO WARNING uncomment
-    // public DefaultTreeModel ArbreLexicographique.getDefaultTreeModel () {
-    //     return this.defaultTreeModel;
-    // }
-
-    public void ArbreLexicographique.setDefaultTreeModel (DefaultTreeModel defaultTreeModel) {
-        this.defaultTreeModel = defaultTreeModel;
-    }
 
 }
 

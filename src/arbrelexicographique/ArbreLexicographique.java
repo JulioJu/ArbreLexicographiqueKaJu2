@@ -1,5 +1,10 @@
 package arbrelexicographique;
 
+import javax.swing.Icon;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeModel;
+
 public class ArbreLexicographique {
 
     private static final long serialVersionUID = 6023914574333353540L;
@@ -69,7 +74,7 @@ public class ArbreLexicographique {
         System.out.println(arbre.prefixe("exa"));
         System.out.println(arbre.nbMots());
 
-        ArbreLexicographique tree = new ArbreLexicographique();
+        // ArbreLexicographique tree = new ArbreLexicographique();
         // System.out.println(tree.getPrivateVarDefineInAspect3());
     }
 

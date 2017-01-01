@@ -19,20 +19,20 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 public class GraphicInterface {
 
     private ArbreLexicographique treeLexico;
-    private DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode();
-    private ArbreLexicographique arbreLexicographiqueJTreeVueAspect = new ArbreLexicographique(new DefaultTreeModel(defaultMutableTreeNode), defaultMutableTreeNode);
+
     public GraphicInterface () {
+        treeLexico = new ArbreLexicographique();
+        treeLexico.ajout("blop");
+        // System.out.println(treeLexico.toString());
+        treeLexico.setVue();
     }
 
     public void displayMenu(JFrame frame) {
@@ -51,8 +51,8 @@ public class GraphicInterface {
         mntmLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                treeLexico.load("blop");
-                System.out.println(treeLexico.toString());
+                // this.treeLexico.load("blop");
+                // System.out.println(this.treeLexico.toString());
             }
         });
 
@@ -61,7 +61,7 @@ public class GraphicInterface {
         mntmSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                treeLexico.save("blop");
+                // this.treeLexico.save("blop");
             }
         });
 
@@ -92,7 +92,7 @@ public class GraphicInterface {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                arbreLexicographiqueJTreeVueAspect.addObject("New Node ");
+                // arbreLexicographiqueJTreeVueAspect.addObject("New Node ");
             }
         });
 
@@ -151,7 +151,7 @@ public class GraphicInterface {
         JPanel panel_jtree = new JPanel();
         tabbedPane.addTab("Tree", null, panel_jtree, null);
         panel_jtree.setLayout(new GridLayout(1, 0));
-        panel_jtree.add(arbreLexicographiqueJTreeVueAspect);
+        panel_jtree.add(this.treeLexico.getVue());
 
         JPanel panel_list = new JPanel();
         tabbedPane.addTab("List", null, panel_list, null);
@@ -197,28 +197,17 @@ public class GraphicInterface {
      */
     public static void main(String[] args) {
 
-        // System.out.println(tree.ajout("exemple"));
-        // tree.ajout("personne");
-        // tree.ajout("exo");
-        // System.out.println(tree.ajout("exemple"));
-        // tree.ajout("dernier");
-        // System.out.println(tree.ajout("exemple"));
-        // tree.ajout("personne");
-        // tree.ajout("exo");
-        // System.out.println(tree.ajout("exemple"));
-        // tree.ajout("dernier");
-
-        // try {
-        //     for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        //         if ("Nimbus".equals(info.getName())) {
-        //             UIManager.setLookAndFeel(info.getClassName());
-        //             break;
-        //         }
-        //     }
-        // } catch (Exception e) {
-        //     // If Nimbus is not available, you can set the GUI to another look and feel.
-        // }
-
+        // GraphicInterface graphicInterface = new GraphicInterface();
+        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
+        // graphicInterface.treeLexico.ajout("personne");
+        // graphicInterface.treeLexico.ajout("exo");
+        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
+        // graphicInterface.treeLexico.ajout("dernier");
+        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
+        // graphicInterface.treeLexico.ajout("personne");
+        // graphicInterface.treeLexico.ajout("exo");
+        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
+        // graphicInterface.treeLexico.ajout("dernier");
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override

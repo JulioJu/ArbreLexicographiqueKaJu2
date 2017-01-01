@@ -65,7 +65,7 @@ public class Noeud extends NoeudAbstrait {
     }
 
     public NoeudAbstrait suppr(String s) throws ArbreLexicographiqueException {
-        NoeudAbstrait n;
+        // NoeudAbstrait n;
         if (s.isEmpty())
             throw new ArbreLexicographiqueException("Suppression impossible");
         char c = s.charAt(0);
@@ -104,6 +104,20 @@ public class Noeud extends NoeudAbstrait {
      */
     public void setFils(NoeudAbstrait fils) {
         this.fils = fils;
+    }
+
+    /**
+     * @return the valeur
+     */
+    public char getValeur() {
+        return valeur;
+    }
+
+    /**
+     * @param valeur the valeur to set
+     */
+    public void setValeur(char valeur) {
+        this.valeur = valeur;
     }
 
 }

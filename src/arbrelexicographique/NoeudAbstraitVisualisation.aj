@@ -13,6 +13,30 @@ public aspect NoeudAbstraitVisualisation {
 
     private DefaultMutableTreeNode NoeudAbstrait.defaultMutableTreeNode;
 
+    public int i = 1;
+
+    // Noeud.toString changed
+    pointcut noeudToString(Noeud noeud, String s) : within (Noeud)
+                               && call(public String toString(String))
+                               && target(noeud)
+                               && args(s)
+                               ;
+    String around(Noeud noeud, String s) : noeudToString(noeud, s) {
+        System.out.println("***");
+        System.out.println(s);
+        System.out.println(noeud.getValeur());
+        System.out.println(i++);
+        System.out.println("***\n\n\n\n\n");
+        // return Character.toString(noeud.getValeur());
+        return s;
+    }
+    // Noeud.toString
+    // TODO Why doesn't it work ??
+    // public String Noeud.toString() {
+    //     return Character.toString(this.getValeur());
+    // }
+
+
     // TreeNode Implementation
     // ***********
 
