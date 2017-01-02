@@ -11,30 +11,17 @@ public aspect NoeudAbstraitVisualisation {
 
     declare parents : NoeudAbstrait implements TreeNode;
 
+    // Not used, but teacher wants this declaration
     private DefaultMutableTreeNode NoeudAbstrait.defaultMutableTreeNode;
 
     // public int i = 1;
 
-    // Noeud.toString changed
-    pointcut noeudToString(Noeud noeud, String s) : within (Noeud)
-                               && call(public String toString(String))
-                               && target(noeud)
-                               && args(s)
-                               ;
-    String around(Noeud noeud, String s) : noeudToString(noeud, s) {
-        // System.out.println("***");
-        // System.out.println(s);
-        // System.out.println(noeud.getValeur());
-        // System.out.println(i++);
-        // System.out.println("***\n\n\n\n\n");
-        // return Character.toString(noeud.getValeur());
-        return s;
-    }
     // Noeud.toString
     public String Noeud.toString() {
         return Character.toString(this.getValeur());
     }
 
+    // Pointcut and advice who create new NoeudVide() when we call « ajout » method
     pointcut setParentAddNodeNoeudVide(NoeudVide noeudVide, String s) :
         within(NoeudVide)
         && call(public NoeudAbstrait ajout(String) throws ArbreLexicographiqueException )
@@ -52,26 +39,23 @@ public aspect NoeudAbstraitVisualisation {
     }
 
 
-    // TreeNode Implementation
-    // ***********
-
     static public final Enumeration<TreeNode> NoeudAbstrait.EMPTY_ENUMERATION
         = Collections.emptyEnumeration();
     // Todo in AspectJ please
     private NoeudAbstrait NoeudAbstrait.parent;
 
+    // TreeNode Implementation
+    // ***********
+
     // @Override doesn't work in AspectJ
     public TreeNode NoeudAbstrait.getChildAt(int childIndex){
         if (this instanceof Marque || this instanceof NoeudVide)
-            return null;
-        NoeudAbstrait filsCourant = (NoeudAbstrait) ((Noeud)this).getFils();
-        if (childIndex == 0){
-            return (TreeNode) filsCourant;
-        }
+            return (TreeNode) new NoeudVide();
         else if (childIndex >= this.getChildCount())
             throw new ArrayIndexOutOfBoundsException("Node has no children at index " + childIndex);
         else {
-            for (int i = 0 ; i < childIndex && i < this.getChildCount() ; i ++) {
+        NoeudAbstrait filsCourant = (NoeudAbstrait) ((Noeud)this).getFils();
+            for (int i = 0 ; i < childIndex ; i ++) {
                 filsCourant = (NoeudAbstrait) filsCourant.getFrere();
             }
             return (TreeNode) filsCourant;
@@ -105,25 +89,27 @@ public aspect NoeudAbstraitVisualisation {
         if (node == null) {
             throw new IllegalArgumentException("Argument is null.");
         }
-        else if (this instanceof Marque || this instanceof NoeudVide) {
-            System.out.println("échec 1");
+        else if (this instanceof Marque || this instanceof NoeudVide)
             return -1;
-        }
+            // throw new IllegalArgumentException("Do not use this method for a Marque or NoeudVide : not childs.");
         else {
-            int count = 0;
-            NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils();
-            if (node instanceof Marque && filsCourant instanceof Marque)
+            int count = -1;
+            NoeudAbstrait filsCourant = (NoeudAbstrait) ((Noeud)this).getFils();
+
+            // Marque is always a first child, so no « for » loop
+            if (filsCourant instanceof Marque && node instanceof Marque)
                 return 0;
+            else if(filsCourant instanceof Marque && !(node instanceof Marque))
+                return -1;
+
             for (
                     ; !(filsCourant instanceof NoeudVide)
-                    // Not isEqual, because it's by reference not by value
                     && ((Noeud)filsCourant).getValeur() != ((Noeud)node).getValeur()
                     ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
                 ) {
                 count ++;
                 }
             if (count == this.getChildCount()) {
-                System.out.println("échec 2");
                 return -1;
             }
             return count;
@@ -151,7 +137,7 @@ public aspect NoeudAbstraitVisualisation {
         if (this instanceof Marque || this instanceof NoeudVide)
             return EMPTY_ENUMERATION;
         else {
-            Vector<NoeudAbstrait> vector = new Vector<NoeudAbstrait>(3, 2);
+            Vector<NoeudAbstrait> vector = new Vector<NoeudAbstrait>();
             for (NoeudAbstrait filsCourant = (Noeud) ((Noeud)this).getFils()
                     ; !(filsCourant instanceof NoeudVide)
                     ; filsCourant = (NoeudAbstrait) filsCourant.getFrere()
@@ -165,14 +151,6 @@ public aspect NoeudAbstraitVisualisation {
     // *************
 
     // Getters and setters
-
-    public DefaultMutableTreeNode NoeudAbstrait.getDefaultMutableTreeNode () {
-        return this.defaultMutableTreeNode;
-    }
-
-    public void NoeudAbstrait.setDefaultMutableTreeNode (DefaultMutableTreeNode defaultMutableTreeNode) {
-        this.defaultMutableTreeNode = defaultMutableTreeNode;
-    }
 
     public void NoeudAbstrait.setParent(NoeudAbstrait parent) {
         this.parent = parent;

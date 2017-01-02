@@ -11,29 +11,24 @@ public aspect ArbreLexicographiqueVisualisation {
 
     declare parents : ArbreLexicographique implements TreeModel ;
 
+    // Not used, but teacher wants this declaration
     private DefaultTreeModel ArbreLexicographique.defaultTreeModel;
+
     EventListenerList ArbreLexicographique.listenerList = new EventListenerList();
 
     // ********* implements TreeModel
 
-    // @Override
+    // @Override doesn't work in AspectJ
     public Object ArbreLexicographique.getRoot () {
-        // TODO for remove this error, I've changed modifier of field 'entre' from private to public
-        // See http://stackoverflow.com/questions/10721037/aspectj-access-private-fields
         return (TreeModel)this;
     }
 
-    // @Override doesn't work in AspectJ
+    // @Override
     public Object ArbreLexicographique.getChild (Object parent, int index) {
-        if (parent instanceof ArbreLexicographique) {
-			System.out.println("Noeud : " + ((Noeud)((ArbreLexicographique)parent).getEntree().getChildAt(index)).toString());
-			System.out.println(parent);
-			System.out.println("Je viens de getChild.");
-			return ((ArbreLexicographique)parent).getEntree().getChildAt(index);
-        }
-        else {
-			return ((NoeudAbstrait)parent).getChildAt(index);
-        }
+        if (parent instanceof ArbreLexicographique)
+            return ((ArbreLexicographique)parent).getEntree().getChildAt(index);
+        else
+            return ((NoeudAbstrait)parent).getChildAt(index);
     }
 
     // @Override
@@ -59,6 +54,8 @@ public aspect ArbreLexicographiqueVisualisation {
     /**
      * Messaged when the user has altered the value for the item
      * identified by path to newValue.  Not used by this model.
+     * See example on
+     * http://docs.oracle.com/javase/tutorial/uiswing/examples/components/index.html#GenealogyExample
      */
     public void ArbreLexicographique.valueForPathChanged(TreePath path, Object newValue) {
         System.out.println("The value has changed (message from ArbreLexicographique.valueForPathChanged)");
@@ -66,12 +63,24 @@ public aspect ArbreLexicographiqueVisualisation {
 
     // @Override
     public int ArbreLexicographique.getIndexOfChild(Object parent, Object child) {
-        if (!(parent instanceof ArbreLexicographique || child instanceof NoeudAbstrait)) {
+    //     if (!(parent instanceof ArbreLexicographique || child instanceof NoeudAbstrait)) {
+    //         return -1;
+    //     }
+    //     else if(parent == null || child == null)
+    //         return -1;
+    //     return ((ArbreLexicographique)parent).getEntree().getIndex((TreeNode)child);
+        // I think child is always of type ArbreLexicographique
+        if (parent == null || child == null)
             return -1;
-        }
-        else if(parent == null || child == null)
-            return -1;
-        return ((ArbreLexicographique)parent).getEntree().getIndex((TreeNode)child);
+        else if (parent instanceof ArbreLexicographique && child instanceof ArbreLexicographique)
+            return ((ArbreLexicographique)parent).getEntree().getIndex((TreeNode)(((ArbreLexicographique)child).getEntree()));
+        else if (parent instanceof ArbreLexicographique && child instanceof NoeudAbstrait)
+            return ((ArbreLexicographique)parent).getEntree().getIndex((TreeNode)child);
+        else if (parent instanceof NoeudAbstrait && child instanceof NoeudAbstrait)
+            return ((NoeudAbstrait)parent).getIndex((TreeNode)child);
+        // else if (parent instanceof NoeudAbstrait && child instanceof ArbreLexicographique)
+        else
+            return ((NoeudAbstrait)parent).getIndex((TreeNode)(((ArbreLexicographique)child).getEntree()));
     }
 
     // @Override
