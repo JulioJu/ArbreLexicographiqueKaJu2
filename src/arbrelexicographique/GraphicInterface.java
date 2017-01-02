@@ -9,34 +9,26 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-public class GraphicInterface implements ActionListener {
+public class GraphicInterface {
 
     private ArbreLexicographique treeLexico;
 
     JPanel panel_jtree;
 
-    private static String ADD_COMMAND = "add";
-    // private static String REMOVE_COMMAND = "remove";
-    // private static String CLEAR_COMMAND = "clear";
-
     public GraphicInterface () {
         treeLexico = new ArbreLexicographique();
-        treeLexico.ajout("_bkm");
         treeLexico.setVue();
     }
 
@@ -89,84 +81,6 @@ public class GraphicInterface implements ActionListener {
 
     }
 
-    // ** Implements ActionListener interface
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-
-        if (ADD_COMMAND.equals(command)) {
-            //Add button clicked
-            treeLexico.ajout("_blop");
-            treeLexico.setVue();
-            panel_jtree.removeAll();
-            panel_jtree.revalidate();
-            panel_jtree.add(this.treeLexico.getVue());
-        }
-        // else if (REMOVE_COMMAND.equals(command)) {
-        //     //Remove button clicked
-        //     treeLexico.removeCurrentNode();
-        // }
-        // else if (CLEAR_COMMAND.equals(command)) {
-        //     //Clear button clicked.
-        //     treeLexico.clear();
-        // }
-    }
-    // *****
-
-    private void addButtons (JPanel panel) {
-        JButton button = null;
-
-        button = new JButton("Add");
-        button.setActionCommand(ADD_COMMAND);
-        button.addActionListener(this);
-        panel.add(button);
-
-        button = new JButton("Delete");
-        panel.add(button);
-
-        button = new JButton("Choose");
-        panel.add(button);
-
-        button = new JButton("Prefix");
-        panel.add(button);
-
-    }
-
-    protected void defineToolBar(JToolBar toolBar) {
-        //separator
-        toolBar.addSeparator();
-
-        JPanel panel = new JPanel();
-        addButtons(panel);
-        toolBar.add(panel);
-
-        toolBar.addSeparator();
-
-        JLabel lblwhat = new JLabel("What?");
-        toolBar.add(lblwhat);
-        toolBar.addSeparator();
-
-        //fifth component is NOT a button!
-        JTextField textField = new JTextField("A text field");
-        textField.setColumns(10);
-        // textField.addActionListener(this);
-        // textField.setActionCommand(TEXT_ENTERED);
-        toolBar.add(textField);
-
-    }
-
-
-    public void displayNorthButtons(JFrame frame) {
-
-
-        //Create the toolbar.
-        JToolBar toolBar = new JToolBar("ToolBox");
-        defineToolBar(toolBar);
-        toolBar.setFloatable(true);
-        toolBar.setRollover(true);
-        frame.add(toolBar, BorderLayout.PAGE_START);
-    }
-
-
     private void displayTabbedPane(JFrame frame) {
 
         JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
@@ -191,6 +105,9 @@ public class GraphicInterface implements ActionListener {
      */
     private static void createAndShowGUI() {
 
+        // CREATE INSTANCE
+        GraphicInterface graphiqueInterfaceInstance = new GraphicInterface();
+
         //Create and set up the window.
         JFrame frame = new JFrame("Lexicographic tree");
         try {
@@ -204,11 +121,13 @@ public class GraphicInterface implements ActionListener {
         frame.setMinimumSize(new Dimension(400, 400));
 
         //Add content to the window.
-        GraphicInterface graphicInterface = new GraphicInterface();
-        graphicInterface.displayMenu(frame);
+        graphiqueInterfaceInstance.displayMenu(frame);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
-        graphicInterface.displayNorthButtons(frame);
-        graphicInterface.displayTabbedPane(frame);
+
+        //Create the toolbar.
+        graphiqueInterfaceInstance.displayTabbedPane(frame);
+        JToolBar toolBar = new GraphicInterfacePanelToolBar("ToolBox", graphiqueInterfaceInstance.treeLexico, graphiqueInterfaceInstance.panel_jtree);
+        frame.add(toolBar, BorderLayout.PAGE_START);
 
         //Display the window.
         frame.pack();
@@ -220,18 +139,6 @@ public class GraphicInterface implements ActionListener {
      * Launch the application.
      */
     public static void main(String[] args) {
-
-        // GraphicInterface graphicInterface = new GraphicInterface();
-        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
-        // graphicInterface.treeLexico.ajout("personne");
-        // graphicInterface.treeLexico.ajout("exo");
-        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
-        // graphicInterface.treeLexico.ajout("dernier");
-        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
-        // graphicInterface.treeLexico.ajout("personne");
-        // graphicInterface.treeLexico.ajout("exo");
-        // System.out.println(graphicInterface.treeLexico.ajout("exemple"));
-        // graphicInterface.treeLexico.ajout("dernier");
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
