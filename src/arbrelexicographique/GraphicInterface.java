@@ -3,7 +3,9 @@ package arbrelexicographique;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -39,7 +41,7 @@ public class GraphicInterface extends JFrame {
         this.setBounds(100, 100, 450, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(400, 400));
-
+        this.setIconImage(createImage("/images/tree-161941_640.png"));
         //Add content to the window.
 
         // Create JTree : instantiate ArbreLexicographique (type JTree);
@@ -47,20 +49,21 @@ public class GraphicInterface extends JFrame {
         this.treeLexico = new ArbreLexicographique();
         this.treeLexico.setVue();
 
-        // Menu
-        JMenuBar menuBar = new GraphicInterfaceMenu(this.treeLexico);
-        this.setJMenuBar(menuBar);
-
         // Fram Layout
         this.getContentPane().setLayout(new BorderLayout(0, 0));
 
-        // Create tabbed pane
+        // Create tabbed pane, instanceof panel_jtree
         JTabbedPane tabbedPane = this.displayTabbedPane();
         this.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         // Create the toolbar.
         JToolBar toolBar = new GraphicInterfacePanelToolBar("ToolBox", this.treeLexico, this.panel_jtree);
         this.add(toolBar, BorderLayout.PAGE_START);
+
+        // Menu
+        JMenuBar menuBar = new GraphicInterfaceMenu(this.treeLexico, panel_jtree);
+        this.setJMenuBar(menuBar);
+
 
         //Display the window.
         this.pack();
@@ -86,6 +89,28 @@ public class GraphicInterface extends JFrame {
         tabbedPane.addTab("List", null, panel_list, null);
 
         return tabbedPane;
+    }
+
+    /** Returns an Image, or null if the path was invalid. */
+    protected static Image createImage(String path) {
+        java.net.URL imgURL = GraphicInterface.class.getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL).getImage();
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
+    /** Returns an ImageIcon, or null if the path was invalid. */
+    protected static ImageIcon createImageIcon(String path) {
+        java.net.URL imgURL = GraphicInterface.class.getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
     }
 
     /**

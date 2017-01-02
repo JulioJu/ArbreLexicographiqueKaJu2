@@ -25,7 +25,7 @@ aspect ArbreLexicographiqueJTreeVueAspect {
         // http://docs.oracle.com/javase/tutorial/uiswing/examples/components/GenealogyExampleProject/src/components/GenealogyTree.java
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         Icon iconNull = null;
-        renderer.setLeafIcon(iconNull);
+        renderer.setLeafIcon(GraphicInterface.createImageIcon("/images/leaf-xs.png"));
         renderer.setClosedIcon(iconNull);
         renderer.setOpenIcon(iconNull);
         vue.setCellRenderer(renderer);

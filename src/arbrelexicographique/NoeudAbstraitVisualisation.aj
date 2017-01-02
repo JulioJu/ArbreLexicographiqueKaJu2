@@ -20,6 +20,10 @@ public aspect NoeudAbstraitVisualisation {
     public String Noeud.toString() {
         return Character.toString(this.getValeur());
     }
+    // Marque toString
+    public String Marque.toString() {
+        return "";
+    }
 
     // Pointcut and advice who create new NoeudVide() when we call « ajout » method
     pointcut setParentAddNodeNoeudVide(NoeudVide noeudVide, String s) :

@@ -12,21 +12,12 @@ import java.nio.file.Paths;
 
 public aspect Serialisation {
 
-    // TODO delete it !!!!!
-    final static String homeDir = System.getProperty("user.home");
-    final static Path directory = Paths.get(homeDir,"/workspace");
-    final static Path file = Paths.get(directory.toString(), "/treeSauvTmp.txt");
-
-
     declare parents : arbrelexicographique.ArbreLexicographique implements Serializable;
 
     public void ArbreLexicographique.save(String fileName) {
 
-        // TODO Make rather an alert Windows
-        // Test if parent directory exist
-        if (!Files.isDirectory(directory)) {
-            throw new FileSystemNotFoundException(directory + "does not exist.");
-        }
+        // Not check if parent directory exists, because make with JFileChooser
+        Path file = Paths.get(fileName);
 
         // TODO Make rather an alert Windows
         // Test if file exit
@@ -35,7 +26,6 @@ public aspect Serialisation {
             try {
                 Files.delete(file);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -56,9 +46,13 @@ public aspect Serialisation {
 
     public void ArbreLexicographique.load(String fileName) {
 
+        Path file = Paths.get(fileName);
+
         try (BufferedReader reader = Files.newBufferedReader(file, Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
+                line = line.replace(System.getProperty("line.separator"), "");
+                line = line.replace("\n", "").replace("\r", "");
                 this.ajout(line);
             }
         } catch (IOException x) {
