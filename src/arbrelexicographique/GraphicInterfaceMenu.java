@@ -1,5 +1,6 @@
 package arbrelexicographique;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -19,7 +20,11 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
     private static String MENU_FILE_LOAD = "load";
     private static String MENU_FILE_EXIT = "exit";
 
-    public GraphicInterfaceMenu() {
+    ArbreLexicographique treeLexico;
+
+    public GraphicInterfaceMenu(ArbreLexicographique treeLexico) {
+
+        this.treeLexico = treeLexico;
 
         JMenu menuFile = new JMenu("File");
         menuFile.setMnemonic(KeyEvent.VK_F);
@@ -33,6 +38,8 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
 
         // TODO save.png is it ok ?
         JMenuItem mntmSave = new JMenuItem("Save", new ImageIcon("images/save.png"));
+        mntmSave.setMnemonic(KeyEvent.VK_S);
+        mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         mntmSave.setActionCommand(MENU_FILE_SAVE);
         mntmSave.addActionListener(this);
         menuFile.add(mntmSave);
@@ -54,10 +61,17 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
 
     // ** Implements ActionListener interface
     public void actionPerformed(ActionEvent e) {
-        if(MENU_FILE_EXIT.equals(MENU_FILE_EXIT)) {
+        String command = e.getActionCommand();
+
+        if(MENU_FILE_EXIT.equals(command)) {
             System.exit(0);
         }
+        else if(MENU_FILE_SAVE.equals(command)) {
+            this.treeLexico.save("blop");
+        }
+        else if(MENU_FILE_LOAD.equals(command)) {
+            this.treeLexico.load("blop");
+        }
     }
-
 
 }

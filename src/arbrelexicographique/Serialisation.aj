@@ -24,7 +24,6 @@ public aspect Serialisation {
 
         // TODO Make rather an alert Windows
         // Test if parent directory exist
-        System.out.println("essai");
         if (!Files.isDirectory(directory)) {
             throw new FileSystemNotFoundException(directory + "does not exist.");
         }
@@ -34,11 +33,11 @@ public aspect Serialisation {
         if (Files.isRegularFile(file)) {
             System.out.println("Warning : file exist !");
             try {
-				Files.delete(file);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                Files.delete(file);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         else if (Files.exists(file)) {
             throw new RuntimeException("'" + file + "' exist but isn't a regular file (it could be for example a directory).");

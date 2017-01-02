@@ -42,8 +42,13 @@ public class GraphicInterface extends JFrame {
 
         //Add content to the window.
 
+        // Create JTree : instantiate ArbreLexicographique (type JTree);
+        // WARNING ALWAYS ADD WITH PREFIX « _ »
+        this.treeLexico = new ArbreLexicographique();
+        this.treeLexico.setVue();
+
         // Menu
-        JMenuBar menuBar = new GraphicInterfaceMenu();
+        JMenuBar menuBar = new GraphicInterfaceMenu(this.treeLexico);
         this.setJMenuBar(menuBar);
 
         // Fram Layout
@@ -63,11 +68,6 @@ public class GraphicInterface extends JFrame {
     }
 
     private JTabbedPane displayTabbedPane() {
-
-        // Create JTree : instantiate ArbreLexicographique (type JTree);
-        // WARNING ALWAYS ADD WITH PREFIX « _ »
-        this.treeLexico = new ArbreLexicographique();
-        this.treeLexico.setVue();
 
         //Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(this.treeLexico.getVue());
