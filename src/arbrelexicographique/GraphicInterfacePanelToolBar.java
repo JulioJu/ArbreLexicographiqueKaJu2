@@ -35,6 +35,7 @@ public class GraphicInterfacePanelToolBar extends JToolBar implements ActionList
         //separator
         this.addSeparator();
 
+        // Add buttons
         JPanel panel = new JPanel();
         addButtons(panel);
         this.add(panel);

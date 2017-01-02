@@ -1,15 +1,11 @@
 package arbrelexicographique;
 
-import java.net.URL;
-
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 aspect ArbreLexicographiqueJTreeVueAspect {
-
 
     declare parents : arbrelexicographique.ArbreLexicographique extends JTree;
 
@@ -19,12 +15,8 @@ aspect ArbreLexicographiqueJTreeVueAspect {
 
         //Create the nodes.
         vue = new JTree((TreeModel)this.getRoot());
-        // System.out.println(((TreeModel)this).getChild((TreeModel)this, 0));
-        System.out.println("blop " + this);
-        System.out.println(this instanceof TreeModel);
         this.getChild(this, 0);
         this.getChildCount(this);
-        System.out.println("this.getIndexOfChild : " + this.getIndexOfChild(this, new Noeud(new NoeudVide(), new Marque(new NoeudVide()), 'c'))) ;
 
         vue.setRootVisible(false);
         vue.setShowsRootHandles(true);
@@ -37,9 +29,6 @@ aspect ArbreLexicographiqueJTreeVueAspect {
         renderer.setClosedIcon(iconNull);
         renderer.setOpenIcon(iconNull);
         vue.setCellRenderer(renderer);
-
-        //Create the scroll pane and add the tree to it.
-        // JScrollPane treeView = new JScrollPane(vue);
 
     }
 

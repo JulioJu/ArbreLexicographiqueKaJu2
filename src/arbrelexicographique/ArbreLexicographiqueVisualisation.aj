@@ -34,7 +34,6 @@ public aspect ArbreLexicographiqueVisualisation {
     // @Override
     public int  ArbreLexicographique.getChildCount(Object parent) {
         if (parent instanceof ArbreLexicographique) {
-            System.out.println("Je viens de getChildCount : " + ((ArbreLexicographique)parent).getEntree().getChildCount());
             return ((ArbreLexicographique)parent).getEntree().getChildCount();
         }
         else {
