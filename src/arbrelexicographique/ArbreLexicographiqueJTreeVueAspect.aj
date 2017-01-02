@@ -1,6 +1,9 @@
 package arbrelexicographique;
 
+import java.net.URL;
+
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -23,16 +26,16 @@ aspect ArbreLexicographiqueJTreeVueAspect {
         this.getChildCount(this);
         System.out.println("this.getIndexOfChild : " + this.getIndexOfChild(this, new Noeud(new NoeudVide(), new Marque(new NoeudVide()), 'c'))) ;
 
-        vue.setRootVisible(true);
+        vue.setRootVisible(false);
         vue.setShowsRootHandles(true);
 
         // Icon JTree
         // http://docs.oracle.com/javase/tutorial/uiswing/examples/components/GenealogyExampleProject/src/components/GenealogyTree.java
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-        Icon personIcon = null;
-        renderer.setLeafIcon(personIcon);
-        renderer.setClosedIcon(personIcon);
-        renderer.setOpenIcon(personIcon);
+        Icon iconNull = null;
+        renderer.setLeafIcon(iconNull);
+        renderer.setClosedIcon(iconNull);
+        renderer.setOpenIcon(iconNull);
         vue.setCellRenderer(renderer);
 
         //Create the scroll pane and add the tree to it.

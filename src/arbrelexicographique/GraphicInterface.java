@@ -24,18 +24,19 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-public class GraphicInterface {
+public class GraphicInterface implements ActionListener {
 
     private ArbreLexicographique treeLexico;
 
+    JPanel panel_jtree;
+
+    private static String ADD_COMMAND = "add";
+    // private static String REMOVE_COMMAND = "remove";
+    // private static String CLEAR_COMMAND = "clear";
+
     public GraphicInterface () {
         treeLexico = new ArbreLexicographique();
-        treeLexico.ajout("lala");
-        treeLexico.ajout("lbla");
-        treeLexico.ajout("lcla");
-        treeLexico.ajout("lcla");
-        // treeLexico.ajout("blop");
-        // System.out.println(treeLexico.toString());
+        treeLexico.ajout("_bkm");
         treeLexico.setVue();
     }
 
@@ -88,17 +89,36 @@ public class GraphicInterface {
 
     }
 
+    // ** Implements ActionListener interface
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        if (ADD_COMMAND.equals(command)) {
+            //Add button clicked
+            treeLexico.ajout("_blop");
+            treeLexico.setVue();
+            panel_jtree.removeAll();
+            panel_jtree.revalidate();
+            panel_jtree.add(this.treeLexico.getVue());
+        }
+        // else if (REMOVE_COMMAND.equals(command)) {
+        //     //Remove button clicked
+        //     treeLexico.removeCurrentNode();
+        // }
+        // else if (CLEAR_COMMAND.equals(command)) {
+        //     //Clear button clicked.
+        //     treeLexico.clear();
+        // }
+    }
+    // *****
+
     private void addButtons (JPanel panel) {
         JButton button = null;
 
         button = new JButton("Add");
+        button.setActionCommand(ADD_COMMAND);
+        button.addActionListener(this);
         panel.add(button);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // arbreLexicographiqueJTreeVueAspect.addObject("New Node ");
-            }
-        });
 
         button = new JButton("Delete");
         panel.add(button);
@@ -152,7 +172,7 @@ public class GraphicInterface {
         JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
         frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-        JPanel panel_jtree = new JPanel();
+        panel_jtree= new JPanel();
         tabbedPane.addTab("Tree", null, panel_jtree, null);
         panel_jtree.setLayout(new GridLayout(1, 0));
         panel_jtree.add(this.treeLexico.getVue());
