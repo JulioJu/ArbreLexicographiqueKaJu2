@@ -8,10 +8,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
@@ -21,19 +25,26 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
     private static String MENU_FILE_SAVE = "save";
     private static String MENU_FILE_OPEN = "open";
     private static String MENU_FILE_EXIT = "exit";
+    private static String MENU_HELP_ABOUT = "help";
 
-    ArbreLexicographique treeLexico;
-    JPanel panel_jtree;
+    private ArbreLexicographique treeLexico;
+    private JPanel panel_jtree;
+    private JTextArea list;
+    private JFrame frame;
+    private JLabel jlabelNumberOfWord;
 
     static private final String newline = "\n";
     JFileChooser fc;
 
-    public GraphicInterfaceMenu(ArbreLexicographique treeLexico, JPanel panel_jtree) {
+    public GraphicInterfaceMenu(ArbreLexicographique treeLexico, JPanel panel_jtree, JFrame frame, JTextArea list, JLabel jlabelNumberOfWord) {
 
         // ArbreLexicographique, type JTree. Need by action listeners,
         // create first
         this.treeLexico = treeLexico;
         this.panel_jtree = panel_jtree;
+        this.frame = frame;
+        this.list = list;
+        this.jlabelNumberOfWord = jlabelNumberOfWord;
 
         //Create a file chooser
         fc = new JFileChooser();
@@ -77,9 +88,13 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
         menuFile.add(menuExit);
 
         JMenu menuHelp = new JMenu("Help");
+        menuHelp.setMnemonic(KeyEvent.VK_H);
         this.add(menuHelp);
 
         JMenuItem mntmAbout = new JMenuItem("About");
+        mntmAbout.setMnemonic(KeyEvent.VK_A);
+        mntmAbout.setActionCommand(MENU_HELP_ABOUT);
+        mntmAbout.addActionListener(this);
         menuHelp.add(mntmAbout);
 
     }
@@ -99,10 +114,7 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
                 File file = fc.getSelectedFile();
                 //This is where a real application would open the file.
                 treeLexico.load(file.toString());
-                treeLexico.setVue();
-                panel_jtree.removeAll();
-                panel_jtree.revalidate();
-                panel_jtree.add(this.treeLexico.getVue());
+                GraphicInterface.displayJTree(this.treeLexico, this.panel_jtree, this.list, this.jlabelNumberOfWord);
             } else {
                 System.out.println("Open command cancelled by user." + newline);
             }
@@ -118,6 +130,12 @@ public class GraphicInterfaceMenu extends JMenuBar implements ActionListener {
             } else {
                 System.out.println("Save command cancelled by user." + newline);
             }
+        }
+        else if (MENU_HELP_ABOUT.equals(command)) {
+            JOptionPane.showMessageDialog(frame,
+                    "TP ArbreLexicographique \n Cours de Programmation Objet Avancée \n Karine Geducci, Julio Prayer \n Années 2016 / 2017",
+                    "About",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

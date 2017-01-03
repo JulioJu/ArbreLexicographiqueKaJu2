@@ -4,8 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
@@ -18,15 +21,22 @@ public class GraphicInterfacePanelToolBar extends JToolBar implements ActionList
     private static String ADD_COMMAND = "add";
     private static String REMOVE_COMMAND = "remove";
     // private static String CLEAR_COMMAND = "clear";
-    private static String CHOOSE_COMMAND = "choose";
+    private static String SEARCH_COMMAND = "search";
+    private static String PREFIX_COMMAND = "prefix";
 
-    ArbreLexicographique treeLexico;
-    JPanel panel_jtree;
+    private ArbreLexicographique treeLexico;
+    private JPanel panel_jtree;
+    private JTextArea list;
+    private JFrame frame;
+    private JLabel jlabelNumberOfWord;
 
-    public GraphicInterfacePanelToolBar(String string, ArbreLexicographique treeLexico, JPanel panel_jtree) {
+    public GraphicInterfacePanelToolBar(String string, ArbreLexicographique treeLexico, JPanel panel_jtree, JFrame frame, JTextArea list, JLabel jlabelNumberOfWord) {
         super(string);
         this.treeLexico = treeLexico;
         this.panel_jtree = panel_jtree;
+        this.list = list;
+        this.frame = frame;
+        this.jlabelNumberOfWord = jlabelNumberOfWord;
 
         // Options
         this.setFloatable(true);
@@ -63,27 +73,48 @@ public class GraphicInterfacePanelToolBar extends JToolBar implements ActionList
             String text = textField.getText();
             textField.selectAll();
             treeLexico.ajout("_" + text);
-            treeLexico.setVue();
-            panel_jtree.removeAll();
-            panel_jtree.revalidate();
-            panel_jtree.add(this.treeLexico.getVue());
+            GraphicInterface.displayJTree(treeLexico, panel_jtree, list, jlabelNumberOfWord);
         }
         else if (REMOVE_COMMAND.equals(command)) {
             //Remove button clicked
             String text = textField.getText();
             textField.selectAll();
             treeLexico.suppr("_" + text);
-            treeLexico.setVue();
-            panel_jtree.removeAll();
-            panel_jtree.revalidate();
-            panel_jtree.add(this.treeLexico.getVue());
+            GraphicInterface.displayJTree(treeLexico, panel_jtree, list, jlabelNumberOfWord);
         }
         // else if (CLEAR_COMMAND.equals(command)) {
         //     //Clear button clicked.
         //     treeLexico.clear();
         // }
-        else if (CHOOSE_COMMAND.equals(command)) {
-
+        else if (SEARCH_COMMAND.equals(command)) {
+            String text = textField.getText();
+            if (treeLexico.getEntree().contient("_" + text)){
+                JOptionPane.showMessageDialog(frame,
+                        "« " + text + " » is a word of this tree",
+                        "Search a word",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(frame,
+                        "« " + text + " » is not a word of this tree",
+                        "Search a word",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        else if (PREFIX_COMMAND.equals(command)) {
+            String text = textField.getText();
+            if (treeLexico.getEntree().prefixe("_" + text)){
+                JOptionPane.showMessageDialog(frame,
+                        "« " + text + " » is a prefix of this tree",
+                        "Search a word",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(frame,
+                        "« " + text + " » is not a prefix of this tree",
+                        "Search a word",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
     // *****
@@ -102,12 +133,14 @@ public class GraphicInterfacePanelToolBar extends JToolBar implements ActionList
         button.addActionListener(this);
         panel.add(button);
 
-        button = new JButton("Choose");
-        button.setActionCommand(CHOOSE_COMMAND);
+        button = new JButton("Search");
+        button.setActionCommand(SEARCH_COMMAND);
         button.addActionListener(this);
         panel.add(button);
 
         button = new JButton("Prefix");
+        button.setActionCommand(PREFIX_COMMAND);
+        button.addActionListener(this);
         panel.add(button);
 
     }
